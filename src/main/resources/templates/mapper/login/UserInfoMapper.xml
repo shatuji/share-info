@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="me.twocat.shareinfo.dao.UserInfoMapper">
+	<resultMap type="me.twocat.shareinfo.entity.User" id="JdUserResultMap">
+	<id column="ID" property="id" />
+	<result column="ACCOUNT" property="account"/>
+	<result column="USERNAME" property="userName"/>
+	<result column="PASSWD" property="passwd"/>
+	<result column="USERPIC" property="userPic"/>
+	<result column="STATUS" property="status"/>
+	<result column="LASTLOGINTIME" property="lastLoginTime"/>
+	<result column="LOGINTIMES" property="loginTimes"/>
+	<result column="CREATETIME" property="createTime"/>
+</resultMap>
+
+	<sql id="allColumns">
+		ID, ACCOUNT ,USERNAME,PASSWD,USERPIC,USERCODE,STATUS,LASTLOGINTIME,LOGINTIMES,CREATETIME
+	</sql>
+	<sql id="partOfColumns">
+		ID, ACCOUNT ,USERNAME
+		,USERPIC,USERCODE,STATUS,LASTLOGINTIME,LOGINTIMES,CREATETIME
+	</sql>
+
+
+	<select id="findJdUserByAccount" parameterType="java.lang.String"  resultMap="JdUserResultMap">
+	     select * from USERINFO u where u.ACCOUNT=#{account}
+	</select>
+
+	<select id="findEntityById" parameterType="java.lang.Integer" resultMap="JdUserResultMap">
+		SELECT * FROM USERINFO u WHERE u.ID=#{id}
+	</select>
+
+	<insert id="insertEntity" parameterType="me.twocat.shareinfo.entity.User">
+		INSERT INTO USERINFO(ACCOUNT ,USERNAME,PASSWD,STATUS,CREATETIME)
+		VALUES(#{account},#{userName},#{passwd},#{status},#{createTime})
+	</insert>
+</mapper>

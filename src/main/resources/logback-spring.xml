@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+<property name="LOGS" value="./logs" />
+<appender name="Console"
+          class="ch.qos.logback.core.ConsoleAppender">
+    <layout class="ch.qos.logback.classic.PatternLayout">
+        <Pattern>
+            %black(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{1.}): %msg%n%throwable
+        </Pattern>
+    </layout>
+</appender>
+
+<appender name="RollingFile"
+          class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${LOGS}/2cat-me-logger.log</file>
+    <encoder
+            class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+        <Pattern>%d %p %C{1.} [%t] %m%n</Pattern>
+    </encoder>
+
+    <rollingPolicy
+            class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+        <!-- rollover daily and when the file reaches 10 MegaBytes -->
+        <fileNamePattern>${LOGS}/archived/2cat-me-logger-%d{yyyy-MM-dd}.%i.log
+        </fileNamePattern>
+        <timeBasedFileNamingAndTriggeringPolicy
+                class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+            <maxFileSize>10MB</maxFileSize>
+
+        </timeBasedFileNamingAndTriggeringPolicy>
+    </rollingPolicy>
+</appender>
+
+<!-- LOG everything at INFO level
+ Whenever we want to have different logging configuration for different environments (profiles),
+ like in Development region we need to have both ConsoleAppender and FileAppender,
+ whereas for the Production region we need to have only ConsoleAppender then we can use
+ <springProfile>
+ -->
+    <springProfile name="dev">
+        <root level="info">
+            <appender-ref ref="Console" />
+        </root>
+     </springProfile>
+    <springProfile name="pro">
+        <root level="info">
+            <appender-ref ref="RollingFile" />
+        </root>
+    </springProfile>
+  <!--
+   You configuration of appender is correct but logger configuration is not.
+   To log SQL statements for particular mybatis mapper
+   set DEBUG (TRACE to see query parameters and results) level
+   for logger with fully qualified mapper name
+  -->
+  <logger name="me.twocat.shareinfo.dao" level="DEBUG"/>
+
+</configuration>
