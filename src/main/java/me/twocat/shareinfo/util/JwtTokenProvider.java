@@ -2,18 +2,19 @@ package me.twocat.shareinfo.util;
 
 
 import io.jsonwebtoken.*;
-import me.twocat.shareinfo.entity.User;
+import me.twocat.shareinfo.entity.userprofile.User;
 import me.twocat.shareinfo.security.UserPrincipal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /***
  @author echo
@@ -73,6 +74,13 @@ public class JwtTokenProvider {
       user.setUserName((String)claims.get("username"));
       user.setAccount((String)claims.get("phoneOrEmail"));
       return user;
+    }
+
+    public UserPrincipal getUserPrincipalFromToken()
+    {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        return new UserPrincipal(12l , "ROLE" ,"DD" , null, authorities);
     }
 
 

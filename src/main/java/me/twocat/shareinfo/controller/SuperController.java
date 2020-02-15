@@ -1,7 +1,6 @@
 package me.twocat.shareinfo.controller;
 
-import me.twocat.shareinfo.entity.User;
-import me.twocat.shareinfo.payload.ApiResponse;
+import me.twocat.shareinfo.entity.userprofile.User;
 import me.twocat.shareinfo.security.JwtAuthenticationFilter;
 import me.twocat.shareinfo.util.JwtTokenProvider;
 import org.slf4j.Logger;

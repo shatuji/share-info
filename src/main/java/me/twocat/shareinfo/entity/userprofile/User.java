@@ -1,23 +1,80 @@
-package me.twocat.shareinfo.entity;
+package me.twocat.shareinfo.entity.userprofile;
 
 
+
+import me.twocat.shareinfo.entity.BasicEntityCls;
 
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-public class User  extends BasicEntityCls{
+public class User  extends BasicEntityCls {
 	private static final long serialVersionUID = 1L;
 	private Long id;
 	private String account;//登陆账号名称
 	private String userName;//用户姓名
 	private String passwd;//登陆密码
+
 	private String userPic;//用户头像
-	private Integer status;//状态 0：新建用户 -1：被删除 -2：被停用
+	private Integer status;//状态 0：新建用户 1：被删除
 	private Date lastLoginTime;//最后登陆时间
 	private Integer loginTimes;//总登陆次数
 	private Date createTime ;//创建时间
 
+	private String profession;//职业
+	private Integer ages;//年龄 0 ：20以下 , 1 ： 20~30 ,  2：30~40 , 3：40~50 , 4：50以上
+	private String address;//地址
+	private String tel;//电话号码
+	private String userCode;//预留
+	private Integer gender;//0 女 1 男
+
+	public String getProfession() {
+		return profession;
+	}
+
+	public void setProfession(String profession) {
+		this.profession = profession;
+	}
+
+	public Integer getAges() {
+		return ages;
+	}
+
+	public void setAges(Integer ages) {
+		this.ages = ages;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getTel() {
+		return tel;
+	}
+
+	public void setTel(String tel) {
+		this.tel = tel;
+	}
+
+	public String getUserCode() {
+		return userCode;
+	}
+
+	public void setUserCode(String userCode) {
+		this.userCode = userCode;
+	}
+
+	public Integer getGender() {
+		return gender;
+	}
+
+	public void setGender(Integer gender) {
+		this.gender = gender;
+	}
 
 	public Long getId() {
 		return id;

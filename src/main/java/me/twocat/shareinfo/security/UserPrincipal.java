@@ -1,11 +1,12 @@
 package me.twocat.shareinfo.security;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import me.twocat.shareinfo.entity.User;
+import me.twocat.shareinfo.entity.userprofile.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Objects;
 
 /***
@@ -26,13 +27,20 @@ public class UserPrincipal implements UserDetails {
     @JsonIgnore
     private String password;
 
-
+    private Collection<? extends GrantedAuthority> authorities;
   public UserPrincipal(Long id, String username, String phoneOrEmail, String password) {
     this.id = id;
     this.username = username;
     this.phoneOrEmail = phoneOrEmail;
     this.password = password;
   }
+    public UserPrincipal(Long id, String username, String phoneOrEmail, String password , Collection<? extends GrantedAuthority> authorities ) {
+        this.id = id;
+        this.username = username;
+        this.phoneOrEmail = phoneOrEmail;
+        this.password = password;
+        this.authorities = authorities;
+    }
 
     public static UserPrincipal create(User user) {
         return  new UserPrincipal(user.getId() ,
@@ -67,7 +75,11 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return authorities;
+    }
+
+    public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
+        this.authorities = authorities;
     }
 
     @Override

@@ -1,15 +1,16 @@
 package me.twocat.shareinfo.service;
 
 import me.twocat.shareinfo.dao.UserInfoMapper;
-import me.twocat.shareinfo.entity.User;
+import me.twocat.shareinfo.entity.userprofile.User;
 import me.twocat.shareinfo.security.UserPrincipal;
-import org.apache.logging.log4j.message.ReusableMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 /***
  @author echo
@@ -25,8 +26,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
 
         try {
-            User user = userInfoMapper.findJdUserByAccount(s);
-            return UserPrincipal.create(user);
+            Optional<User> user = userInfoMapper.findJdUserByAccount(s);
+            if(user.isPresent())
+            return UserPrincipal.create(user.get());
+            return  null;
         }catch (Exception e){
             e.printStackTrace();
             return null;

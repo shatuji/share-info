@@ -1,12 +1,13 @@
 package me.twocat.shareinfo.controller;
 
 import me.twocat.shareinfo.dao.UserInfoMapper;
-import me.twocat.shareinfo.entity.User;
+import me.twocat.shareinfo.entity.userprofile.User;
 import me.twocat.shareinfo.payload.ApiResponse;
 import me.twocat.shareinfo.payload.JwtAuthenticationResponse;
 import me.twocat.shareinfo.payload.LoginRequest;
 import me.twocat.shareinfo.payload.SignUpRequest;
 import me.twocat.shareinfo.util.JwtTokenProvider;
+import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +20,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.net.URI;
 import java.util.Date;
+import java.util.Optional;
 
 /***
  @author echo
@@ -74,7 +74,7 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
-        URI location = null;
+
         try {
             // Creating user's account
             User user = new User();
@@ -84,14 +84,26 @@ public class AuthController {
             user.setPasswd(passwordEncoder.encode(signUpRequest.getPassword()));
             user.setStatus(0);
             user.setCreateTime(new Date());
-
-
             userInfoMapper.insertEntity(user);
-
         }catch (Exception ex){
             ex.printStackTrace();
             LOGGER.info("authcontroller sign up error message--->{}" , ex.getMessage());
         }
         return ResponseEntity.ok(ApiResponse.responseSuccess());
+    }
+
+    /***
+     * check account whether exit in user table
+     * 检测账户是否存在
+     * @param account
+     * @return
+     */
+    @RequestMapping("/checkaccount")
+    public ResponseEntity checkAccountDupli(@Param("account") String account){
+        Optional<User> user = userInfoMapper.findJdUserByAccount(account);
+        if(user.isPresent())
+            return ResponseEntity.ok(ApiResponse.responseFailure().setMessage("账户已经存在!!!"));
+        else
+            return ResponseEntity.ok(ApiResponse.responseSuccess().setMessage("账户不存在!!!"));
     }
 }

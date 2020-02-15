@@ -39,7 +39,11 @@ public  class ApiResponse {
    */
   public static ApiResponse responseFailure()
     {
-      return getInstance().setStatus(500).setMessage(MessageEnum.failure.val);
+      return getInstance().setStatus(500).setMessage(MessageEnum.FAILURE.val);
+    }
+
+    public static ApiResponse responseNullVal(){
+        return getInstance().setStatus(404).setMessage(MessageEnum.NULLS.val);
     }
   public ApiResponse(Boolean success, String message) {
 

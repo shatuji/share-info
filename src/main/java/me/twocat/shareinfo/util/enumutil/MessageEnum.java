@@ -2,9 +2,10 @@ package me.twocat.shareinfo.util.enumutil;
 
 public enum MessageEnum {
       SUCCESS("this request success"),
-      failure("this request failure");
+      NULLS("request null"),
+      FAILURE("this request failure");
       public final String val;
-      private MessageEnum(String val){
+      MessageEnum(String val){
         this.val = val;
       }
 }

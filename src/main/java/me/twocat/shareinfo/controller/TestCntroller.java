@@ -1,6 +1,6 @@
 package me.twocat.shareinfo.controller;
 
-import me.twocat.shareinfo.entity.User;
+import me.twocat.shareinfo.entity.userprofile.User;
 import me.twocat.shareinfo.payload.ApiResponse;
 import me.twocat.shareinfo.service.redis.RedisServiceApiImpl;
 import org.springframework.beans.factory.annotation.Autowired;

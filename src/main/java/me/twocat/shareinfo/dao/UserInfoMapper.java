@@ -1,8 +1,10 @@
 package me.twocat.shareinfo.dao;
 
 
-import me.twocat.shareinfo.entity.User;
+import me.twocat.shareinfo.entity.userprofile.User;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.Optional;
 
 public interface UserInfoMapper {
 
@@ -11,7 +13,7 @@ public interface UserInfoMapper {
 	 * @param account
 	 * @return
 	 */
-	User findJdUserByAccount(@Param("account") String account);
+	Optional<User> findJdUserByAccount(@Param("account") String account);
 
 	/**
 	 * 根据id查询
@@ -22,4 +24,9 @@ public interface UserInfoMapper {
 	 * 增加用户
 	 * */
 	void insertEntity(User param);
+
+	/***
+	 * update 用户信息
+	 */
+	void updateUser(User param);
 }
