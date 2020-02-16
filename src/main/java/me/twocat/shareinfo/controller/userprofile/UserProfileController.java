@@ -37,4 +37,21 @@ public class UserProfileController extends SuperController {
         }
         return ResponseEntity.ok(ApiResponse.responseFailure());
     }
+
+    /**
+     * 展示个人主页
+     * show yourself profile context blow
+     * @return
+     */
+    @RequestMapping("/showprofile")
+    public ResponseEntity showProfile(){
+        Optional<User> loginUser = getUserInfo();
+        if(loginUser.isPresent()){
+            Optional<User> optionalUser = userProfileService.selectUserById(loginUser.get().getId());
+            if(optionalUser.isPresent()){
+                return ResponseEntity.ok(ApiResponse.responseSuccess().setData(optionalUser.get()));
+            }
+        }
+        return ResponseEntity.ok(ApiResponse.responseFailure());
+    }
 }

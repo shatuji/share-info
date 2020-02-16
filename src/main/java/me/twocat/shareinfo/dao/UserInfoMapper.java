@@ -18,7 +18,7 @@ public interface UserInfoMapper {
 	/**
 	 * 根据id查询
 	 * */
-	User findEntityById(Integer id);
+	User findEntityById(@Param("id") Long id);
 
 	/**
 	 * 增加用户

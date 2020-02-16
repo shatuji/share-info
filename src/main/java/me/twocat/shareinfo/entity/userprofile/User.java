@@ -2,6 +2,7 @@ package me.twocat.shareinfo.entity.userprofile;
 
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import me.twocat.shareinfo.entity.BasicEntityCls;
 
 import java.util.Date;
@@ -17,8 +18,10 @@ public class User  extends BasicEntityCls {
 
 	private String userPic;//用户头像
 	private Integer status;//状态 0：新建用户 1：被删除
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Date lastLoginTime;//最后登陆时间
 	private Integer loginTimes;//总登陆次数
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Date createTime ;//创建时间
 
 	private String profession;//职业
@@ -27,6 +30,15 @@ public class User  extends BasicEntityCls {
 	private String tel;//电话号码
 	private String userCode;//预留
 	private Integer gender;//0 女 1 男
+	private String  personalStyle;//个性签名
+
+	public String getPersonalStyle() {
+		return personalStyle;
+	}
+
+	public void setPersonalStyle(String personalStyle) {
+		this.personalStyle = personalStyle;
+	}
 
 	public String getProfession() {
 		return profession;

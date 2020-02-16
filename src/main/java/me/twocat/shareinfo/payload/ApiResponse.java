@@ -12,7 +12,7 @@ import java.util.Map;
 public  class ApiResponse {
     private String message;
     private Integer status;
-    private Map<String , Object> data;
+    private Object data;
 
 
     public  ApiResponse()
@@ -59,11 +59,11 @@ public  class ApiResponse {
     return this;
   }
 
-  public Map<String, Object> getData() {
+  public Object getData() {
     return data;
   }
 
-  public ApiResponse setData(Map<String, Object> data) {
+  public ApiResponse setData(Object data) {
     this.data = data;
     return this;
   }

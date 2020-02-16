@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class UserProfileServiceImpl implements GenricSelectServer<User> {
@@ -20,6 +21,11 @@ public class UserProfileServiceImpl implements GenricSelectServer<User> {
         return null;
     }
 
+    /***
+     * update user
+     * @param user
+     * @return
+     */
     public boolean updateUser(User user)
     {
         boolean flags = false;
@@ -30,5 +36,18 @@ public class UserProfileServiceImpl implements GenricSelectServer<User> {
             LOGGER.info("用户更新页面报错(user update website has error )---->{}" , ex.getMessage());
         }
         return flags;
+    }
+
+    /**
+     * extract user table information by id
+     * 提取user表的信息根据id
+     * @param id
+     * @return
+     */
+    public Optional<User> selectUserById(Long id){
+        if(id != null){
+           return Optional.ofNullable(userInfoMapper.findEntityById(id));
+        }
+        return Optional.empty();
     }
 }
