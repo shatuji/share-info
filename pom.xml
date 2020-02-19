@@ -110,6 +110,21 @@
           </exclusion>
         </exclusions>
       </dependency>
+        <!--elacsearch import-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+        </dependency>
+        <!--The health status of Elasticsearch connection may be exposed by the application through Spring Boot Actuator health endpoint-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.elasticsearch.client</groupId>
+            <artifactId>elasticsearch-rest-high-level-client</artifactId>
+            <version>7.6.0</version>
+        </dependency>
       <!--send email to customer-->
         <dependency>
           <groupId>com.sun.mail</groupId>

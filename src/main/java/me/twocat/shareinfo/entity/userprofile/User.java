@@ -18,10 +18,8 @@ public class User  extends BasicEntityCls {
 
 	private String userPic;//用户头像
 	private Integer status;//状态 0：新建用户 1：被删除
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Date lastLoginTime;//最后登陆时间
 	private Integer loginTimes;//总登陆次数
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Date createTime ;//创建时间
 
 	private String profession;//职业
