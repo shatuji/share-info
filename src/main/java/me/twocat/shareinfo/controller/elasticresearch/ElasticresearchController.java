@@ -12,8 +12,8 @@ import javax.xml.ws.Response;
 public class ElasticresearchController {
 
   @RequestMapping("/test")
-  public ResponseEntity test(){
-    return null ;
+  public String test(){
+    return "null" ;
   }
 
 }
