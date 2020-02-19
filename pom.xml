@@ -17,7 +17,8 @@
     <properties>
         <java.version>1.8</java.version>
         <jjwt.version>0.9.0</jjwt.version>
-      <spring.boot.version>2.2.4.RELEASE</spring.boot.version>
+        <spring.boot.version>2.2.4.RELEASE</spring.boot.version>
+        <elasticsearch.version>7.6.0</elasticsearch.version>
     </properties>
 
   <!--使用阿里云的中央仓库-->
@@ -49,11 +50,7 @@
             <version>1.2.3</version>
         </dependency>
 
-        <!--log4j2-->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-log4j2</artifactId>-->
-<!--        </dependency>-->
+
       <!--send SMS message -->
       <dependency>
         <groupId>com.aliyun</groupId>
@@ -112,18 +109,19 @@
       </dependency>
         <!--elacsearch import-->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
-        </dependency>
-        <!--The health status of Elasticsearch connection may be exposed by the application through Spring Boot Actuator health endpoint-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
+            <groupId>org.elasticsearch</groupId>
+            <artifactId>elasticsearch</artifactId>
+            <version>${elasticsearch.version}</version>
         </dependency>
         <dependency>
             <groupId>org.elasticsearch.client</groupId>
             <artifactId>elasticsearch-rest-high-level-client</artifactId>
-            <version>7.6.0</version>
+            <version>${elasticsearch.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.9.6</version>
         </dependency>
       <!--send email to customer-->
         <dependency>
