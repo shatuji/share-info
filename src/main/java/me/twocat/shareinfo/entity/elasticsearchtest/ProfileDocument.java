@@ -1,7 +1,10 @@
 package me.twocat.shareinfo.entity.elasticsearchtest;
 
+import lombok.Data;
+
 import java.util.List;
 
+@Data
 public class ProfileDocument {
 
 
