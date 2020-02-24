@@ -7,6 +7,7 @@ import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
+
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
@@ -16,6 +17,9 @@ import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.indices.CreateIndexRequest;
+import org.elasticsearch.client.indices.CreateIndexResponse;
+import org.elasticsearch.common.settings.Settings;
+
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.Operator;
@@ -26,10 +30,8 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.io.IOException;
+import java.util.*;
 
 import static javax.xml.crypto.dsig.XMLObject.TYPE;
 import static org.elasticsearch.action.update.UpdateHelper.ContextFields.INDEX;
@@ -44,105 +46,72 @@ public class ProfileService {
   @Autowired
   private ObjectMapper objectMapper;
 
-//  @Autowired
-//  public ProfileService(RestHighLevelClient client, ObjectMapper objectMapper) {
-//    this.client = client;
-//    this.objectMapper = objectMapper;
-//  }
-
+  /***
+   * create index about elactisearch
+   * @param document
+   * @return
+   * @throws Exception
+   */
   public String createProfileDocument(ProfileDocument document) throws Exception {
 
     UUID uuid = UUID.randomUUID();
-    document.setId(uuid.toString());
-    CreateIndexRequest request = new CreateIndexRequest("twitter");
-    IndexRequest indexRequest = new IndexRequest(INDEX, TYPE, document.getId())
-      .source(convertProfileDocumentToMap(document), XContentType.JSON);
+   // document.setId(uuid.toString());
+    CreateIndexRequest request = new CreateIndexRequest("test");
+    request.settings(Settings.builder() .put("index.number_of_shards", 1)
+      .put("index.number_of_replicas", 2));
+    Map<String, Object> message = new HashMap<>();
+    message.put("type", "text145454545as4df4as5df4a5sdf4a5sd4f5asdf45asdf4a5dsf4a5dsf45asdfa");
+    Map<String, Object> properties = new HashMap<>();
+    properties.put("message", message);
+    properties.put("userId", message);
+    properties.put("name", message);
+    Map<String, Object> mapping = new HashMap<>();
+    mapping.put("properties", properties);
+    request.mapping(mapping);
+    CreateIndexResponse indexResponse = client.indices()
+                          .create(request , RequestOptions.DEFAULT);
 
-    IndexResponse indexResponse = client.index(indexRequest, RequestOptions.DEFAULT);
+    return indexResponse.index();
+  }
+
+  public String insertIndexDocument(Object obj) throws IOException {
+    UUID uuid = UUID.randomUUID();
+    IndexRequest indexRequest = new IndexRequest("test");
+    indexRequest.id(uuid.toString());
+    Map<String, Object> properties = new HashMap<>();
+    String message = "this is elactisearch value below and you can search it ";
+    properties.put("message", message);
+    properties.put("userId", message);
+    properties.put("name", message);
+    indexRequest.source(properties , XContentType.JSON);
+    IndexResponse indexResponse = client.index(indexRequest , RequestOptions.DEFAULT);
+    System.out.println("print data about value id--->" + indexResponse.getId());
     return indexResponse.getResult().name();
-  }
-
-  public ProfileDocument findById(String id) throws Exception {
-
-    GetRequest getRequest = new GetRequest(INDEX, TYPE, id);
-
-    GetResponse getResponse = client.get(getRequest, RequestOptions.DEFAULT);
-    Map<String, Object> resultMap = getResponse.getSource();
-
-    return convertMapToProfileDocument(resultMap);
 
   }
 
 
 
-  public String updateProfile(ProfileDocument document) throws Exception {
-
-    ProfileDocument resultDocument = findById(document.getId());
-
-    UpdateRequest updateRequest = new UpdateRequest(
-      INDEX,
-      TYPE,
-      resultDocument.getId());
-
-    updateRequest.doc(convertProfileDocumentToMap(document));
-    UpdateResponse updateResponse = client.update(updateRequest, RequestOptions.DEFAULT);
-
-    return updateResponse
-      .getResult()
-      .name();
-
-  }
-
-  public List<ProfileDocument> findAll() throws Exception {
 
 
-    SearchRequest searchRequest = buildSearchRequest(INDEX,TYPE);
-    SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-    searchSourceBuilder.query(QueryBuilders.matchAllQuery());
-    searchRequest.source(searchSourceBuilder);
-
-    SearchResponse searchResponse =
-      client.search(searchRequest, RequestOptions.DEFAULT);
-
-    return getSearchResult(searchResponse);
-  }
 
 
-  public List<ProfileDocument> findProfileByName(String name) throws Exception{
-
+  public SearchResponse findAll(String field) throws Exception {
 
     SearchRequest searchRequest = new SearchRequest();
-    searchRequest.indices(INDEX);
-    searchRequest.types(TYPE);
+    QueryBuilder matchQueryBuilder = QueryBuilders.matchQuery("name" , field);
+    SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+    sourceBuilder.query(matchQueryBuilder);
+    searchRequest.source(sourceBuilder);
+    SearchResponse searchResponse = client.search(searchRequest , RequestOptions.DEFAULT);
 
-    SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-
-    MatchQueryBuilder matchQueryBuilder = QueryBuilders
-      .matchQuery("name",name)
-      .operator(Operator.AND);
-
-    searchSourceBuilder.query(matchQueryBuilder);
-
-    searchRequest.source(searchSourceBuilder);
-
-    SearchResponse searchResponse =
-      client.search(searchRequest, RequestOptions.DEFAULT);
-
-    return getSearchResult(searchResponse);
-
+    return searchResponse;
   }
 
 
-  public String deleteProfileDocument(String id) throws Exception {
 
-    DeleteRequest deleteRequest = new DeleteRequest(INDEX, TYPE, id);
-    DeleteResponse response = client.delete(deleteRequest,RequestOptions.DEFAULT);
 
-    return response
-      .getResult()
-      .name();
 
-  }
 
   private Map<String, Object> convertProfileDocumentToMap(ProfileDocument profileDocument) {
     return objectMapper.convertValue(profileDocument, Map.class);
@@ -153,47 +122,6 @@ public class ProfileService {
   }
 
 
-  public List<ProfileDocument> searchByTechnology(String technology) throws Exception{
 
-    SearchRequest searchRequest = buildSearchRequest(INDEX,TYPE);
-    SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
-    QueryBuilder queryBuilder = QueryBuilders
-      .boolQuery()
-      .must(QueryBuilders
-        .matchQuery("technologies.name",technology));
-
-    searchSourceBuilder.query(QueryBuilders.nestedQuery("technologies",queryBuilder, ScoreMode.Avg));
-
-    searchRequest.source(searchSourceBuilder);
-
-    SearchResponse response = client.search(searchRequest, RequestOptions.DEFAULT);
-
-    return getSearchResult(response);
-  }
-
-  private List<ProfileDocument> getSearchResult(SearchResponse response) {
-
-    SearchHit[] searchHit = response.getHits().getHits();
-
-    List<ProfileDocument> profileDocuments = new ArrayList<>();
-
-    for (SearchHit hit : searchHit){
-      profileDocuments
-        .add(objectMapper
-          .convertValue(hit
-            .getSourceAsMap(), ProfileDocument.class));
-    }
-
-    return profileDocuments;
-  }
-
-  private SearchRequest buildSearchRequest(String index, String type) {
-
-    SearchRequest searchRequest = new SearchRequest();
-    searchRequest.indices(index);
-    searchRequest.types(type);
-
-    return searchRequest;
-  }
 }
