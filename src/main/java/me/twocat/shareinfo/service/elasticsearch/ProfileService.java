@@ -33,9 +33,6 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.*;
 
-import static javax.xml.crypto.dsig.XMLObject.TYPE;
-import static org.elasticsearch.action.update.UpdateHelper.ContextFields.INDEX;
-
 @Service
 public class ProfileService {
 
@@ -60,7 +57,7 @@ public class ProfileService {
     request.settings(Settings.builder() .put("index.number_of_shards", 1)
       .put("index.number_of_replicas", 2));
     Map<String, Object> message = new HashMap<>();
-    message.put("type", "text145454545as4df4as5df4a5sdf4a5sd4f5asdf45asdf4a5dsf4a5dsf45asdfa");
+    message.put("type", "text");
     Map<String, Object> properties = new HashMap<>();
     properties.put("message", message);
     properties.put("userId", message);

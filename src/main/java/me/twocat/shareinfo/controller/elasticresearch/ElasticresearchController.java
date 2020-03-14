@@ -4,7 +4,6 @@ package me.twocat.shareinfo.controller.elasticresearch;
 
 import lombok.extern.slf4j.Slf4j;
 import me.twocat.shareinfo.service.elasticsearch.ProfileService;
-import org.apache.logging.log4j.message.ReusableMessage;
 import org.elasticsearch.action.search.SearchResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("/elatc")
-
 public class ElasticresearchController {
 
   @Autowired
@@ -21,7 +19,7 @@ public class ElasticresearchController {
   @RequestMapping("/test")
   public String test(){
     try {
-      log.info("");
+      log.info("print this all info");
       return "index value is -->" + profileService.createProfileDocument(null);
     }catch (Exception ex)
     {
@@ -45,7 +43,6 @@ public class ElasticresearchController {
   @RequestMapping("/insertdata")
   public String insertDataByIndex(){
     try {
-
       return profileService.insertIndexDocument(null);
     }catch (Exception ex){
       log.info("pritn ex value--->{}" , ex);
