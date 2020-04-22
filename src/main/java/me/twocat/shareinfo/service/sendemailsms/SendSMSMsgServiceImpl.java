@@ -27,10 +27,10 @@ import com.aliyuncs.http.MethodType;
 @Service
 public class SendSMSMsgServiceImpl {
   public static final Logger LOGGER = LoggerFactory.getLogger(SendEmailServerImpl.class);
-  private static  final String accessKeyId = "LTAI4Ffr4rtpscv9jG8NdBmP";
-  private static final String accessSecrectVal = "V40LdbOD2zX37UXSCLgPVvjKqCimlc";
+  private static  final String accessKeyId = "LTAI4Ffr4rtpscvG8NdBmP";
+  private static final String accessSecrectVal = "V40LdbOD2zX37ULgPVvjKqCimlc";
   private static final String SignName = "两只猫咪";
-  private static final String TemplateCode = "SMS_183262730";
+  private static final String TemplateCode = "SMS_1832620";
   @Autowired
   RedisServiceApiImpl redisServiceApi;
 
